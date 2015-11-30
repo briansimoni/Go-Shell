@@ -18,21 +18,21 @@ func main() {
 		root, _ := filepath.Abs(".")
 		fmt.Print(root,"$ ")
 
-		s := ""
-		fmt.Scanln(&s)
+		input := ""
+		fmt.Scanln(&input)
 
-		if s == "ls" {
+		if input == "ls" {
 
 			files, _ := ioutil.ReadDir("./")
-	    	for _, f := range files {
+			for _, f := range files {
 	    		fmt.Println(f.Name())
 	    	}
 
-		} else if s == "exit" {
+		} else if input == "exit" {
 			exit = true
 			fmt.Println("Go shell exited")
 		} else {
-			fmt.Println("No command",s,"found")
+			fmt.Println("No command",input,"found")
 		}
 
 	}
