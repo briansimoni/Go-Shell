@@ -54,7 +54,7 @@ func main() {
 		case "cd":
 			path = functions.Cd(path, arg, err)
 
-		case "exit":
+		case "quit":
 			exit = true
 			fmt.Println("Go shell exited")
 
