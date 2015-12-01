@@ -9,11 +9,11 @@ package main
 
 import (
     "fmt"
-    "io/ioutil"
     "path/filepath"
     "os"
     "bufio"
     "strings"
+    "Go-Shell/functions"
 )
 
 func main() {
@@ -22,17 +22,17 @@ func main() {
 	os.Chdir(path)
 
 	exit := false
-	for exit == false {
+	for exit == false { // essentially a while loop
 
 		
 		fmt.Print(path ,"$ ")
+		
 
+		// get user input
 		reader := bufio.NewReader(os.Stdin)
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
 		slice := strings.Split(input, " ")
-
-		fmt.Println(slice)
 
 		command := slice[0]
 		var arg string
@@ -42,23 +42,23 @@ func main() {
 		}
 
 
-		if command == "dir" {
 
-			files, _ := ioutil.ReadDir(path)
-			for _, f := range files {
-	    		fmt.Println(f.Name())
-	    	}
 
-		} else if command == "cd" {
-			path, err = filepath.Abs(arg)
-			os.Chdir(path)
-			if err != nil{
-				fmt.Println(err)
-			}
-		} else if command == "exit" {
+
+		// execute commands
+		switch command { 
+
+		case "dir":
+			functions.Dir(path)
+
+		case "cd":
+			path = functions.Cd(path, arg, err)
+
+		case "exit":
 			exit = true
 			fmt.Println("Go shell exited")
-		} else {
+
+		default:
 			fmt.Println("No command",command,"found")
 		}
 
