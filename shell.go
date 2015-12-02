@@ -8,12 +8,13 @@
 package main
 
 import (
-    "fmt"
-    "path/filepath"
-    "os"
-    "bufio"
-    "strings"
-    "Go-Shell/functions"
+	"Go-Shell/functions"
+	"bufio"
+	"fmt"
+	"os"
+    "os/exec"
+	"path/filepath"
+	"strings"
 )
 
 func main() {
@@ -24,9 +25,7 @@ func main() {
 	exit := false
 	for exit == false { // essentially a while loop
 
-		
-		fmt.Print(path ,"$ ")
-		
+		fmt.Print(path, "$ ")
 
 		// get user input
 		reader := bufio.NewReader(os.Stdin)
@@ -37,32 +36,33 @@ func main() {
 		command := slice[0]
 		var arg string
 
-		if len(slice) > 1{
+		if len(slice) > 1 {
 			arg = slice[1]
 		}
 
-
-
-
-
 		// execute commands
-		switch command { 
-
-		case "dir":
-			functions.Dir(path)
+		switch command {
 
 		case "cd":
 			path = functions.Cd(path, arg, err)
+        
+        case "clr":
+            cmd := exec.Command("clear")
+            cmd.Stdout = os.Stdout
+            cmd.Run()
+            if err != nil {}
+
+		case "dir":
+			functions.Dir(path)
 
 		case "quit":
 			exit = true
 			fmt.Println("Go shell exited")
 
 		default:
-			fmt.Println("No command",command,"found")
+			fmt.Println("No command", command, "found")
 		}
 
 	}
-
 
 }
