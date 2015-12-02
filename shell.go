@@ -10,17 +10,32 @@ package main
 import (
 	"Go-Shell/functions"
 	"bufio"
+    "errors"
 	"fmt"
 	"os"
     "os/exec"
-	"path/filepath"
+// 	"path/filepath"
 	"strings"
+    "io/ioutil"
 )
 
 func main() {
 
-	path, err := filepath.Abs("/")
-	os.Chdir(path)
+    shellName := "Go-Shell"
+    
+// 	path, err := filepath.Abs(".")
+// 	os.Chdir(path)
+  
+    path := os.Getenv("PWD")
+     
+    // set the SHELL environment variable
+    
+    
+    os.Setenv("SHELL", shellName )
+    
+    
+    
+    
 
 	exit := false
 	for exit == false { // essentially a while loop
@@ -44,7 +59,7 @@ func main() {
 		switch command {
 
 		case "cd":
-			path = functions.Cd(path, arg, err)
+			path = functions.Cd(path, arg, nil)
         
         case "clr":
             cmd := exec.Command("clear")
@@ -70,9 +85,66 @@ func main() {
 			fmt.Println("Go shell exited")
 
 		default:
-			fmt.Println("No command", command, "found")
+            err := invokeProgram (command)
+            if (err != nil) {
+                fmt.Println("No command", command, "found")
+            }
 		}
 
 	}
 
+}
+
+func invokeProgram (programName string) error {
+    fullpath := searchPATHforProgram(programName)
+
+    if (fullpath == "") {
+//         errorstr := strings.Join(["Command", programName, "not found"])
+        errorstr := "Command" + programName + "not found"
+        return errors.New(errorstr)
+    }
+    
+    fmt.Println(fullpath)
+    
+    cmd := exec.Command( fullpath )
+    cmd.Stdout = os.Stdout
+    cmd.Run()
+    
+    return nil
+}
+
+
+/*
+ * searchPATHforProgram - returns the path to a program's executable file
+ * Input: the name of a program to search for
+ * Output: the full path (including program filename) if successful
+ *         else, an empty string.
+ */
+func searchPATHforProgram (programName string) string {
+    
+    programPath := ""
+    
+    // Get all the possible directories for the program to hide in
+    executableDirs := strings.Split(os.Getenv("PATH"), ":")
+    executableDirs = append(executableDirs, os.Getenv("GOPATH") )
+    
+    
+    // Search through each directory to find a matching filename
+    isFound := false
+    for _, dir := range executableDirs {
+        files, _ := ioutil.ReadDir(dir)
+        
+        for _, f := range files {
+            if( f.Name() == programName ) {
+                programPath = dir + "/" + programName 
+                isFound = true
+                break
+            }
+        }
+        if (isFound) {
+            break
+        }
+    }
+
+    return programPath
 }
