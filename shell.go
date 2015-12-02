@@ -50,11 +50,16 @@ func main() {
             cmd := exec.Command("clear")
             cmd.Stdout = os.Stdout
             cmd.Run()
-            if err != nil {}
 
 		case "dir":
 			functions.Dir(path)
-
+        
+        case "environ":
+            env_vars := os.Environ()
+            for _, env_str := range env_vars {
+                fmt.Println(env_str)
+            }
+            
 		case "quit":
 			exit = true
 			fmt.Println("Go shell exited")
