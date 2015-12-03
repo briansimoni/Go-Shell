@@ -21,17 +21,14 @@ import (
 
 func main() {
 
-    shellName := "Go-Shell"
-    
-// 	path, err := filepath.Abs(".")
-// 	os.Chdir(path)
+//     shellName := "Go-Shell"
   
     path := os.Getenv("PWD")
      
     // set the SHELL environment variable
     
     
-    os.Setenv("SHELL", shellName )
+//     os.Setenv("SHELL", shellName )
     
     
     
@@ -49,18 +46,21 @@ func main() {
 		slice := strings.Split(input, " ")
 
 		command := slice[0]
-		var arg string
+		var args []string
 
 		if len(slice) > 1 {
-			arg = slice[1]
+			args = slice[1:]
 		}
 
 		// execute commands
 		switch command {
 
 		case "cd":
-			path = functions.Cd(path, arg, nil)
-        
+            if len(args) == 0 {
+                fmt.Println(path)
+            } else {
+                path = functions.Cd(path, args[0], nil)
+            }
         case "clr":
             cmd := exec.Command("clear")
             cmd.Stdout = os.Stdout
@@ -80,17 +80,18 @@ func main() {
 			fmt.Println("Go shell exited")
 
 		default:
-            err := invokeProgram (command)
+            err := invokeProgram (command, args)
             if (err != nil) {
                 fmt.Println("No command", command, "found")
             }
-		}
+            
+		} //end command switch
 
-	}
+	} // end command loop
 
-}
+} // end main
 
-func invokeProgram (programName string) error {
+func invokeProgram (programName string, args []string) error {
     fullpath := searchPATHforProgram(programName)
 
     if (fullpath == "") {
@@ -99,12 +100,20 @@ func invokeProgram (programName string) error {
         return errors.New(errorstr)
     }
     
-    fmt.Println(fullpath)
+//     fmt.Println(fullpath)
     
-    cmd := exec.Command( fullpath )
-    cmd.Stdout = os.Stdout
-    cmd.Run()
+//     cmd := exec.Command( fullpath, args )
+//     cmd.Stdout = os.Stdout
+//     cmd.Run()
+    var attribs os.ProcAttr
+    attribs.Files = []*os.File{ os.Stdin, os.Stdout, os.Stderr }
+    proc, err := os.StartProcess(fullpath, args, &attribs)
     
+    if (err != nil) {
+        return errors.New("Error when starting " + programName)
+    }
+    proc.Wait()
+
     return nil
 }
 
