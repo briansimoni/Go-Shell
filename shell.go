@@ -74,6 +74,11 @@ func main() {
             for _, env_str := range env_vars {
                 fmt.Println(env_str)
             }
+        case "echo":
+        	fmt.Println(arg)
+        case "pause":
+        	fmt.Print("Press 'Enter' to continue...")
+  			bufio.NewReader(os.Stdin).ReadBytes('\n')
             
 		case "quit":
 			exit = true
