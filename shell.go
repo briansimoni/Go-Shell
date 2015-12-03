@@ -75,7 +75,7 @@ func main() {
                 fmt.Println(env_str)
             }
         case "echo":
-        	fmt.Println(arg)
+        	fmt.Println(args[0])
         case "pause":
         	fmt.Print("Press 'Enter' to continue...")
   			bufio.NewReader(os.Stdin).ReadBytes('\n')
@@ -111,7 +111,12 @@ func invokeProgram (programName string, args []string) error {
 //     cmd.Stdout = os.Stdout
 //     cmd.Run()
     var attribs os.ProcAttr
-    attribs.Files = []*os.File{ os.Stdin, os.Stdout, os.Stderr }
+    attribs.Files = []*os.File{ nil, os.Stdout, os.Stderr }
+    
+    // Need to include program name as ARGV[0]
+    args = append( []string{programName}, args... )
+    
+    // Start the process
     proc, err := os.StartProcess(fullpath, args, &attribs)
     
     if (err != nil) {
@@ -124,7 +129,7 @@ func invokeProgram (programName string, args []string) error {
 
 
 /*
- * searchPATHforProgram - returns the path to a program's executable file
+ * searchPATHforProgram - returns the full path to a program's executable file
  * Input: the name of a program to search for
  * Output: the full path (including program filename) if successful
  *         else, an empty string.
