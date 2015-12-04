@@ -122,6 +122,16 @@ func repl (filename, path string) error {
                 exit = true
                 fmt.Println("Go shell exited")
 
+            case "help":
+            	fmt.Println("cd - change the current directory");
+            	fmt.Println("clr - clear the screen");
+            	fmt.Println("dir - list the contents of the directory");
+            	fmt.Println("environ - list all environment strings");
+            	fmt.Println("echo [comment] - prints the comment to the screen");
+            	fmt.Println("help - displays the user manual");
+            	fmt.Println("pause - pauses the shell until enter is pressed");
+            	fmt.Println("quit - quits the shell");
+
             default:
                 err := invokeProgram (command, args)
                 if (err != nil) {
