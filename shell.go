@@ -99,6 +99,12 @@ func main() {
 
 } // end main
 
+
+/*
+ * invokeProgram - runs a program with its arguments as a new process
+ * Input: the name of the program to run and a list of its arguments
+ * Output: an error on whether or not the new process started
+ */
 func invokeProgram (programName string, args []string) error {
     
     fullpath := searchPATHforProgram(programName)
