@@ -2,8 +2,14 @@
 
 This is our shell project for VCU's operating systems class (CMSC 312)
 
-It is written in the popular new Go Language.
+It is written in the popular new Go Language. 
 
+## Install
+todo
+
+
+
+-----------------------------------------------------------------
 For group members, we can deploy to VCU's server with something like sftp.
 Assuming you use linux or MacOS
 
