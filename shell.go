@@ -21,18 +21,17 @@ import (
 
 func main() {
 
-//     shellName := "Go-Shell"
-  
+
+    // define and set environment variables
+    // TODO: move to a separate struct and function
     path := os.Getenv("PWD")
-     
-    // set the SHELL environment variable
+    parent := "Go-Shell"
+    shell := searchPATHforProgram(parent)
     
+    os.Setenv("PARENT", parent)
+    os.Setenv("SHELL", shell)
     
-//     os.Setenv("SHELL", shellName )
-    
-    
-    
-    
+   
 
 	exit := false
 	for exit == false { // essentially a while loop
@@ -54,7 +53,10 @@ func main() {
 
 		// execute commands
 		switch command {
-
+            
+        case "":
+            // do nothing
+            
 		case "cd":
             if len(args) == 0 {
                 fmt.Println(path)
@@ -75,7 +77,8 @@ func main() {
                 fmt.Println(env_str)
             }
         case "echo":
-        	fmt.Println(args[0])
+            s := strings.Join(args, " ")
+        	fmt.Println(s)
         case "pause":
         	fmt.Print("Press 'Enter' to continue...")
   			bufio.NewReader(os.Stdin).ReadBytes('\n')
@@ -97,6 +100,7 @@ func main() {
 } // end main
 
 func invokeProgram (programName string, args []string) error {
+    
     fullpath := searchPATHforProgram(programName)
 
     if (fullpath == "") {
@@ -105,11 +109,8 @@ func invokeProgram (programName string, args []string) error {
         return errors.New(errorstr)
     }
     
-//     fmt.Println(fullpath)
-    
-//     cmd := exec.Command( fullpath, args )
-//     cmd.Stdout = os.Stdout
-//     cmd.Run()
+    // os.StartProcess used instead of exec.Command because it cleanly accepts
+    // an arbitrary slice of strings for a program and its arguments.
     var attribs os.ProcAttr
     attribs.Files = []*os.File{ nil, os.Stdout, os.Stderr }
     
