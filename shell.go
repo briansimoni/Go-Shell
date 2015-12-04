@@ -15,6 +15,9 @@ import (
     "os/exec"
 	"path/filepath"
 	"strings"
+	//"io/ioutil"
+	"io"
+	"bytes"
 )
 
 func main() {
@@ -63,6 +66,9 @@ func main() {
 		case "quit":
 			exit = true
 			fmt.Println("Go shell exited")
+
+		case "help":
+			
 
 		default:
 			fmt.Println("No command", command, "found")
