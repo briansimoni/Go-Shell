@@ -96,7 +96,7 @@ func repl (filename, path string) error {
                 if len(args) == 0 {
                     fmt.Println(path)
                 } else {
-                    path = functions.Cd(path, args[0], nil)
+                    path = functions.Cd(args[0])
                 }
             case "clr":
                 cmd := exec.Command("clear")

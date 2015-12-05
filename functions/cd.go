@@ -1,17 +1,25 @@
 package functions
 
 import (
-    "fmt"
-    "path/filepath"
-    "os"
+"fmt"
+"path/filepath"
+"os"
+"io/ioutil"
 )
 
 
-func Cd(path, arg string, err error) string{
-	path, err = filepath.Abs(arg)
-	os.Chdir(path)
-	if err != nil{
-		fmt.Println(err)
+
+func Cd(arg string) string {
+
+	path, _ := filepath.Abs(arg)
+
+	_, err := ioutil.ReadDir(path)
+	if err != nil {
+		fmt.Println("error:",err)
+		return os.Getenv("PWD")
+	} else {
+		os.Chdir(path)
+		return path
 	}
-	return path
+
 }
