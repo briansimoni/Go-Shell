@@ -3,7 +3,7 @@
 // if command not found, print "No command (command) found"
 //
 //
-// ****** commands that work right now: ls, exit, cd ******
+// ****** use help for information on commands ******
 
 package main
 
