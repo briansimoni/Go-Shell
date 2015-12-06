@@ -44,95 +44,7 @@ func main() {
 
 ///////////////////////////////////////////////////////////////////////////
 // read, eval, print, loop
-<<<<<<< HEAD
-///////////////////////////////////////////////////////////////////////////
-func repl(filename, path string) error {
 
-	var commandlinesource *bufio.Scanner
-
-	if filename == "" {
-		commandlinesource = bufio.NewScanner(os.Stdin)
-	} else {
-		commandfile, _ := os.Open(filename)
-		defer commandfile.Close()
-
-		commandlinesource = bufio.NewScanner(commandfile)
-	}
-
-	exit := false
-	for exit == false { // essentially a while loop
-
-		// Display a prompt
-		fmt.Print(path, "$ ")
-
-		// read a line of input
-		var input string
-		if commandlinesource.Scan() {
-			input = commandlinesource.Text()
-		} else {
-			exit = true
-		}
-		input = strings.TrimSpace(input)
-		tokens := strings.Split(input, " ")
-
-		// set the command to the first token and its arguments to the rest
-		command := tokens[0]
-		var args []string
-		if len(tokens) > 1 {
-			args = tokens[1:]
-		}
-
-		// Advance the display writer to the next line
-		fmt.Println()
-
-		// execute commands
-		switch command {
-
-		case "":
-			// do nothing
-
-		case "cd":
-			if len(args) == 0 {
-				fmt.Println(path)
-			} else {
-				path = functions.Cd(path, args[0], nil)
-			}
-		case "clr":
-			cmd := exec.Command("clear")
-			cmd.Stdout = os.Stdout
-			cmd.Run()
-
-		case "dir":
-			functions.Dir(path)
-
-		case "environ":
-			env_vars := os.Environ()
-			for _, env_str := range env_vars {
-				fmt.Println(env_str)
-			}
-		case "echo":
-			s := strings.Join(args, " ")
-			fmt.Println(s)
-		case "pause":
-			fmt.Print("Press 'Enter' to continue...")
-			bufio.NewReader(os.Stdin).ReadBytes('\n')
-
-		case "quit":
-			exit = true
-			fmt.Println("Go shell exited")
-
-		default:
-			err := invokeProgram(command, args)
-			if err != nil {
-				fmt.Println("No command", command, "found")
-			}
-
-		} //end command switch
-
-	} // end command loop
-
-	return nil
-=======
 /////////////////////////////////////////////////////////////////////////// 
 func repl (filename, path string) error {  
     
@@ -232,7 +144,7 @@ func repl (filename, path string) error {
 /////////////////////////////////////////////////////////////////////////////
 
     return nil
->>>>>>> 45cc0ed4453d7d7716e5cc39d071f5586dcf46ce
+
 }
 
 /*
